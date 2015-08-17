@@ -7,9 +7,13 @@
     var orig = Polymer.Base[m];
     Polymer.Base[m] = function(path) {
       var obj = this.get(path);
-      this._flushObserveJsObservers(obj);
+      if (this._flushObserveJsObservers) {
+        this._flushObserveJsObservers(obj);
+      }
       orig.apply(this, arguments);
-      this._discardObserveJsObservers(obj);
+      if (this._discardObserveJsObservers) {
+        this._discardObserveJsObservers(obj);
+      }
     };
   }, this);
 })();
@@ -107,6 +111,7 @@ Polymer.ObserveJsBehavior = {
   },
 
   _removeObserveJsObserver: function(object, path) {
+    var obs = this._observeJsStatic.observerMap.get(object);
     var el = obs.elements[this._observeJsId];
     if (--el.paths[path] === 0) {
       delete el.paths[path];
@@ -153,9 +158,10 @@ Polymer.ObserveJsBehavior = {
   },
 
   debounce: function(jobName, callback, wait) {
+    var host = this;
     Polymer.Base.debounce.call(this, jobName, callback, function() {
-      callback.apply(this, arguments);
-      this._observerCheckpoint();
+      callback.apply(host, arguments);
+      host._observerCheckpoint();
     }, wait);
   },
 
