@@ -13,8 +13,8 @@ Optional file to load after polymer.html that adds a `Polymer.onerror` handler
 (similar to window.onerror) that will be called when any error is thrown from
 Polymer code entry points.  Usage:
 
-  <link rel="import" href="polymer.html">
-  <link rel="import" href="polymer-onerror.html">
+  <link rel="import" href="components/polymer/polymer.html">
+  <link rel="import" href="components/polymer-experiments/polymer-onerror.html">
   <script>
     Polymer.onerror = function(e) {
       MyErrorReporter.reportError(e);
