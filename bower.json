@@ -1,0 +1,27 @@
+{
+  "name": "polymer-experiments",
+  "version": "0.0.1",
+  "description": "Polymer Experiments",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "keywords": [
+    "web-components",
+    "web-component",
+    "polymer",
+    "experiments"
+  ],
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/paper-button"
+  },
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "web-component-tester": "*"
+  }
+}

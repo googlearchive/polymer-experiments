@@ -1,0 +1,71 @@
+<dom-module id="x-listener-throws">
+  <template>
+    <div id="child" on-childerror="childThrows"></div>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'x-created-throws',
+    created: function() {
+      throw new Error('error in created');
+    }
+  });
+  Polymer({
+    is: 'x-attached-throws',
+    attached: function() {
+      throw new Error('error in attached');
+    }
+  });
+  Polymer({
+    is: 'x-detached-throws',
+    attached: function() {
+      throw new Error('error in detached');
+    }
+  });
+  Polymer({
+    is: 'x-attribute-throws',
+    attributeChanged: function() {
+      throw new Error('error in attributeChanged');
+    }
+  });
+  Polymer({
+    is: 'x-listener-throws',
+    listeners: {
+      hosterror: 'hostThrows'
+    },
+    hostThrows: function() {
+      throw new Error('host listener throws');
+    },
+    childThrows: function() {
+      throw new Error('child listener throws');
+    },
+    throwChild: function() {
+      this.fire('childerror', {}, {node: this.$.child});
+    },
+    throwHost: function() {
+      this.fire('hosterror');
+    },
+    unlistenHost: function() {
+      this.unlisten(this, 'hosterror', 'hostThrows');
+    }
+  });
+  Polymer({
+    is: 'x-async-throws',
+    throwAsync: function() {
+      this.async(function() {
+        throw new Error('async throws');
+      });
+    }
+  });
+  Polymer({
+    is: 'x-node-observer-throws',
+    ready: function() {
+      Polymer.dom(this).observeNodes(this.throwNodeObserver.bind(this));
+    },
+    throwNodeObserver: function() {
+      throw new Error('observe nodes throws');
+    }
+  });
+</script>
+

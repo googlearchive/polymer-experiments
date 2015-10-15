@@ -1,0 +1,105 @@
+<!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+Optional file to load after polymer.html that adds a `Polymer.onerror` handler
+(similar to window.onerror) that will be called when any error is thrown from
+Polymer code entry points.  Usage:
+
+  <link rel="import" href="polymer.html">
+  <link rel="import" href="polymer-onerror.html">
+  <script>
+    Polymer.onerror = function(e) {
+      MyErrorReporter.reportError(e);
+      throw e;
+    }
+  </script>
+
+NOTE: If `Polymer.onerror` is defined, it is the implementor's responsibility to
+re-throw the error if uncaught errors on the console are desired.
+-->
+
+<script>
+(function() {
+
+  function onError(e) {
+    if (window.Polymer.onerror) {
+      window.Polymer.onerror(e);
+    } else {
+      throw e;
+    }
+  }
+
+  var createdCallback = Polymer.Base.createdCallback;
+  Polymer.Base.createdCallback = function() {
+    try {
+      createdCallback.apply(this, arguments);
+    } catch(e) {
+      onError(e);
+    }
+  };
+
+  var attachedCallback = Polymer.Base.attachedCallback;
+  Polymer.Base.attachedCallback = function() {
+    try {
+      attachedCallback.apply(this, arguments);
+    } catch(e) {
+      onError(e);
+    }
+  };
+
+  var detachedCallback = Polymer.Base.detachedCallback;
+  Polymer.Base.detachedCallback = function() {
+    try {
+      detachedCallback.apply(this, arguments);
+    } catch(e) {
+      onError(e);
+    }
+  };
+
+  var attributeChangedCallback = Polymer.Base.attributeChangedCallback;
+  Polymer.Base.attributeChangedCallback = function() {
+    try {
+      attributeChangedCallback.apply(this, arguments);
+    } catch(e) {
+      onError(e);
+    }
+  };
+
+  var listen = Polymer.Base._listen;
+  var listenMap = new WeakMap();
+  Polymer.Base._listen = function(node, eventName, handler) {
+    var safeHandler = function() {
+      try {
+        handler.apply(this, arguments);
+      } catch(e) {
+        onError(e);
+      }
+    };
+    listenMap.set(handler, safeHandler);
+    listen.call(this, node, eventName, safeHandler);
+  };
+
+  var unlisten = Polymer.Base._unlisten;
+  Polymer.Base._unlisten = function(node, eventName, handler) {
+    unlisten.call(this, node, eventName, listenMap.get(handler));
+  };
+
+  var atEndOfMicrotask = Polymer.Async._atEndOfMicrotask;
+  Polymer.Async._atEndOfMicrotask = function() {
+    try {
+      atEndOfMicrotask.apply(Polymer.Async, arguments);
+    } catch(e) {
+      onError(e);
+    }
+  };
+
+})();
+</script>

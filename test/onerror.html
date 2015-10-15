@@ -1,0 +1,106 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../polymer-onerror.html">
+  <link rel="import" href="onerror-elements.html">
+</head>
+<body>
+
+<script>
+
+  suite('callbacks', function() {
+
+    test('created callback throws', function(done) {
+      Polymer.onerror = sinon.spy();
+      document.createElement('x-created-throws');
+      setTimeout(function() {
+        assert.isTrue(Polymer.onerror.calledOnce);
+        done();
+      });
+    });
+
+    test('attached callback throws', function(done) {
+      Polymer.onerror = sinon.spy();
+      var el = document.createElement('x-attached-throws');
+      document.body.appendChild(el);
+      setTimeout(function() {
+        assert.isTrue(Polymer.onerror.calledOnce);
+        done();
+      });
+    });
+
+    test('attributeChanged callback throws', function(done) {
+      Polymer.onerror = sinon.spy();
+      var el = document.createElement('x-attribute-throws');
+      el.setAttribute('foo', 'bar');
+      setTimeout(function() {
+        assert.isTrue(Polymer.onerror.calledOnce);
+        done();
+      });
+    });
+
+    test('host listener throws', function(done) {
+      Polymer.onerror = sinon.spy();
+      var el = document.createElement('x-listener-throws');
+      el.throwHost();
+      setTimeout(function() {
+        assert.isTrue(Polymer.onerror.calledOnce);
+        // Test that unlisten works: event should not be caught, onerror
+        // count should not increase
+        el.unlistenHost();
+        el.throwHost();
+        setTimeout(function() {
+          assert.isTrue(Polymer.onerror.calledOnce);
+          done();
+        });
+      });
+    });
+
+    test('child listener throws', function(done) {
+      Polymer.onerror = sinon.spy();
+      var el = document.createElement('x-listener-throws');
+      el.throwChild();
+      setTimeout(function() {
+        assert.isTrue(Polymer.onerror.calledOnce);
+        done();
+      });
+    });
+
+    test('async callback throws', function(done) {
+      Polymer.onerror = sinon.spy();
+      var el = document.createElement('x-async-throws');
+      el.throwAsync();
+      setTimeout(function() {
+        assert.isTrue(Polymer.onerror.calledOnce);
+        done();
+      });
+    });
+
+    test('node observer callback throws', function(done) {
+      Polymer.onerror = sinon.spy();
+      var el = document.createElement('x-node-observer-throws');
+      el.appendChild(document.createElement('div'));
+      setTimeout(function() {
+        assert.isTrue(Polymer.onerror.calledOnce);
+        done();
+      });
+    });
+
+  });
+
+</script>
+</body>
+</html>
