@@ -14,7 +14,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/PolymerElements/paper-button"
+    "url": "git://github.com/PolymerLabs/polymer-experiments"
   },
   "license": "http://polymer.github.io/LICENSE.txt",
   "dependencies": {
