@@ -1,0 +1,80 @@
+<!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<dom-module id="x-produces">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height: 35px;
+        border: 1px solid red;
+        background: pink;
+        margin: 10px;
+        padding: 10px;
+      }
+      input {
+        border: none;
+        border-bottom: 1px solid gray;
+        background: transparent;
+        font-size: inherit;
+        font-family: inherit;
+      }
+    </style>
+    <div>x-produces value: <input value="{{value::input}}"></div>
+    <div>data from host: {{fromHost}}</div>
+  </template>
+  <script>
+    Polymer({
+      is: 'x-produces',
+      properties: {
+        value: {
+          type: String,
+          notify: true,
+          value: 'produced'
+        },
+        fromHost: {
+          type: String
+        }
+      }
+    });
+  </script>
+</dom-module>
+
+<dom-module id="x-consumes">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height: 35px;
+        border: 1px solid blue;
+        background: lightblue;
+        margin: 10px;
+        padding: 10px;
+      }
+    </style>
+    <div>x-consumes value: {{value}}</div>
+    <div>data from host: {{fromHost}}</div>
+  </template>
+  <script>
+    Polymer({
+      is: 'x-consumes',
+      properties: {
+        value: {
+          type: String,
+          notify: true,
+          value: 'default'
+        },
+        fromHost: {
+          type: String
+        }
+      }
+    });
+  </script>
+</dom-module>

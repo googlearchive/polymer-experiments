@@ -1,0 +1,118 @@
+<!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+
+ What this demo demonstrates:
+
+ - Phase 1: index.html loads with top-level app structure and enough styling
+            to get non-upgraded elements into place.
+
+ - Phase 2: critical.html loads async, carrying just Polymer and `my-app`
+            definition.  `my-app` is a body type extension that implements
+            Polymer.LightDomBindingBehavior, which scans its light-DOM template
+            for bindings (rather than a template).  At this point, my-app
+            upgrades and can poke any data brought in the critical section
+            (e.g. "lorem ipsum") into its template, and definitions for
+            non-critical elements are async lazy-loaded.
+
+ - Phase 3: elements.html loads async, carrying remaining element definitions
+            `x-produces` and `x-consumes`.  These elements upgrade and are
+            late-bound to any host data and can participate in normal
+            binding with the host.
+
+  Throttle the loading speed in the devtools Network panel to ~"Good 3G" to
+  get a nice view of the 3 phases.
+
+-->
+
+<!doctype html>
+<html>
+<head>
+
+  <title>body-bind</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Phase 2: Async load Polymer & critical elements (just my-app) -->
+  <!-- <link rel="import" href="critical.html" async> -->
+  <link rel="import" href="critical.build.html" async>
+
+  <style>
+
+    /* Main document styles */
+    body {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      border: 10px solid gray;
+    }
+    .toolbar {
+      height: 40px;
+      font-size: 20px;
+      background: orange;
+      padding: 10px;
+    }
+    #console, #text {
+      padding: 10px;
+    }
+
+    /* This is verbatim pulled from `:host` rules in top-level elements */
+    x-produces:unresolved {
+      display: block;
+      height: 35px;
+      border: 1px solid red;
+      background: pink;
+      margin: 10px;
+      padding: 10px;
+    }
+    x-consumes:unresolved {
+      display: block;
+      height: 35px;
+      border: 1px solid blue;
+      background: lightblue;
+      margin: 10px;
+      padding: 10px;
+    }
+  </style>
+
+</head>
+
+
+<!--
+  If my-app didn't need event handlers, default data, computed functions,
+  etc. and only needed binding ala dom-bind, it could just use is="body-bind",
+  which is a no-frills implementation of Polymer.LightDomBindingBehavior.
+  Since we do, using the behavior on a `body` Custom Element type extension
+  allows us to write the top-level app element idiomatically using all the
+  features of a normal element.
+-->
+<!-- <body is="body-bind"> -->
+<body is="my-app">
+
+  <!-- Phase 1: This stuff renders with above provided document styles -->
+  <!-- `my-app` won't be upgraded until Phase 2 -->
+
+  <div class="toolbar">The value is: <span text-content="{{computeTitle(value)}}"></span></div>
+
+  <!-- These elements are upgraded in Phase 3 -->
+  <x-produces value="{{value}}" from-host="{{forChildren}}" on-tap="tapped"></x-produces>
+  <x-consumes value="{{value}}" from-host="{{forChildren}}" on-tap="tapped"></x-consumes>
+
+  <div id="text" text-content="{{text}}"></div>
+
+  <pre id="console"></pre>
+
+</body>
+
+</html>
