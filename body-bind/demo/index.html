@@ -111,7 +111,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <div id="text" text-content="{{text}}"></div>
 
-  <pre id="console"></pre>
+  <pre id="console"><template is="dom-repeat" items="{{log}}">{{item.text}}</template></pre>
+
 
 </body>
 

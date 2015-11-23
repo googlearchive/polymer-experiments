@@ -30,14 +30,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       value: {
         type: String,
         observer: '_valueChanged'
+      },
+      // Shows my-app can use a dom-repeat
+      log: {
+        value: function() {
+          return [{text: 'my-app is upgraded\n'}, {text: 'dom-repeat works\n'}];
+        }
       }
     },
-    ready: function() {
-      this._consoleLog('my-app is upgraded');
-    },
     _consoleLog: function(text) {
-      this.$.console.appendChild(document.createTextNode(text));
-      this.$.console.appendChild(document.createElement('br'));
+      this.push('log', {text: text + '\n'});
     },
     // Shows my-app can use computed functions
     computeTitle: function(value) {
