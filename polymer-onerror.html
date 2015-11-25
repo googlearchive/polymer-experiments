@@ -101,5 +101,26 @@ re-throw the error if uncaught errors on the console are desired.
     }
   };
 
+  var renderStatusMakeReady = Polymer.RenderStatus._makeReady;
+  Polymer.RenderStatus._makeReady = function() {
+    try {
+      renderStatusMakeReady.apply(Polymer.RenderStatus, arguments);
+    } catch(e) {
+      onError(e);
+    }
+  };
+
+  var polymerWarn = Polymer.Base._warn;
+  Polymer.Base._warn = function(msg) {
+    polymerWarn.apply(Polymer.Base, arguments);
+    onError(new Error(msg));
+  };
+
+  var polymerError = Polymer.Base._error;
+  Polymer.Base._error = function(msg) {
+    polymerError.apply(Polymer.Base, arguments);
+    onError(new Error(msg));
+  };
+
 })();
 </script>

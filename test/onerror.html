@@ -11,6 +11,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <html>
 <head>
   <meta charset="utf-8">
+  <script>
+    WCT = { trackConsoleError: false};
+  </script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../../polymer/polymer.html">
@@ -40,6 +43,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.isTrue(Polymer.onerror.calledOnce);
         done();
       });
+    });
+
+    test('attached callback (in-document element) throws', function() {
+      assert.isTrue(window.attachedOnError.calledOnce);
     });
 
     test('attributeChanged callback throws', function(done) {
@@ -99,8 +106,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
     });
 
+    test('_warn called', function() {
+      Polymer.onerror = sinon.spy();
+      var el = document.createElement('x-warns');
+      assert.isTrue(Polymer.onerror.calledOnce);
+      assert.include(Polymer.onerror.getCalls()[0].args[0].message, 'x-warns is warning!')
+    });
+
+    test('_error called', function() {
+      Polymer.onerror = sinon.spy();
+      var el = document.createElement('x-errors');
+      assert.isTrue(Polymer.onerror.calledOnce);
+      assert.include(Polymer.onerror.getCalls()[0].args[0].message, 'x-errors is erroring!')
+    });
+
   });
 
 </script>
+
+<!-- Test in-document attached error -->
+<script>
+  HTMLImports.whenReady(function() {
+    window.attachedOnError = Polymer.onerror = sinon.spy();
+  });
+</script>
+<x-attached-throws id="attachedEl"></x-attached-throws>
+
 </body>
 </html>

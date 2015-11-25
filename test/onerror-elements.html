@@ -5,30 +5,35 @@
 </dom-module>
 
 <script>
+
   Polymer({
     is: 'x-created-throws',
     created: function() {
       throw new Error('error in created');
     }
   });
+
   Polymer({
     is: 'x-attached-throws',
     attached: function() {
       throw new Error('error in attached');
     }
   });
+
   Polymer({
     is: 'x-detached-throws',
     attached: function() {
       throw new Error('error in detached');
     }
   });
+
   Polymer({
     is: 'x-attribute-throws',
     attributeChanged: function() {
       throw new Error('error in attributeChanged');
     }
   });
+
   Polymer({
     is: 'x-listener-throws',
     listeners: {
@@ -50,6 +55,7 @@
       this.unlisten(this, 'hosterror', 'hostThrows');
     }
   });
+
   Polymer({
     is: 'x-async-throws',
     throwAsync: function() {
@@ -58,6 +64,7 @@
       });
     }
   });
+
   Polymer({
     is: 'x-node-observer-throws',
     ready: function() {
@@ -67,5 +74,20 @@
       throw new Error('observe nodes throws');
     }
   });
+
+  Polymer({
+    is: 'x-warns',
+    ready: function() {
+      this._warn(this._logf('ready', 'x-warns is warning!'));
+    }
+  });
+
+  Polymer({
+    is: 'x-errors',
+    ready: function() {
+      this._error(this._logf('ready', 'x-errors is erroring!'));
+    }
+  });
+
 </script>
 
