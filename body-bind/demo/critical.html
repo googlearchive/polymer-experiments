@@ -8,7 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../polymer.html">
 <link rel="import" href="../body-bind.html">
 
 <script>
@@ -36,6 +36,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         value: function() {
           return [{text: 'my-app is upgraded\n'}, {text: 'dom-repeat works\n'}];
         }
+      },
+      // Shows outer-scope binding to dom-if
+      buttonLabel: {
+        value: 'Tap me'
       }
     },
     _consoleLog: function(text) {
@@ -54,6 +58,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       this._consoleLog(Polymer.dom(e).localTarget.localName + ' was tapped');
     }
   });
+</script>
+
+<link rel="import" href="../polymer-elements.html">
+
+<script>
   // Phase 3: Async fetch elements to be upgraded & bound lazily
   Polymer.Base.importHref('elements.html');
 </script>

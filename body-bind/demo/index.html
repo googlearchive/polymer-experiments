@@ -63,7 +63,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       background: orange;
       padding: 10px;
     }
-    #console, #text {
+    #console, #text, #iffed {
       padding: 10px;
     }
 
@@ -111,8 +111,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <div id="text" text-content="{{text}}"></div>
 
-  <pre id="console"><template is="dom-repeat" items="{{log}}">{{item.text}}</template></pre>
+  <template is="dom-if" if>
+    <div id="iffed"><button on-tap="tapped">{{buttonLabel}}</button></div>
+  </template>
 
+  <pre id="console"><template is="dom-repeat" items="{{log}}">(outer: {{value}}) {{item.text}}</template></pre>
 
 </body>
 
